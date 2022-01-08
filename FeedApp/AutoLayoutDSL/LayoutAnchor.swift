@@ -34,6 +34,9 @@ extension LayoutAnchor {
     static let top = relative(attribute: .top, relation: .equal, relatedTo: .top)
     static let bottom = relative(attribute: .bottom, relation: .equal, relatedTo: .bottom)
     
+    static let centerX = relative(attribute: .centerX, relation: .equal, relatedTo: .centerX)
+    static let centerY = relative(attribute: .centerY, relation: .equal, relatedTo: .centerY)
+    
     static let width = constant(attribute: .width, relation: .equal)
     static let height = constant(attribute: .height, relation: .equal)
     
