@@ -7,12 +7,31 @@
 
 import UIKit
 
+
 class FeedCell: UITableViewCell {
     
     static public let identifier = "FeedCell"
     
     private var cvLayout: UICollectionViewFlowLayout!
     
+    public var postImageViewConstraint: NSLayoutConstraint!
+    
+    public var postImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = .systemRed
+        //imageView.isHidden = true
+        return imageView
+    }()
+    var postLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .systemPurple
+        label.numberOfLines = 0
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        return label
+    }()
+    
+    
+
     let mainView: UIView = {
         let view = UIView()
         
@@ -39,7 +58,7 @@ class FeedCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fillEqually
         stackView.backgroundColor = .darkGray
         return stackView
     }()
@@ -60,11 +79,14 @@ class FeedCell: UITableViewCell {
     let contentHeaderLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .systemPurple
-        
+        label.numberOfLines = 0
+        label.text = "Header"
+        label.font = .systemFont(ofSize: 21, weight: .semibold)
         return label
     }()
-    var imagesCollectionView: UICollectionView!
     
+    var imagesCollectionView: UICollectionView!
+
     let contentImageView: UIImageView = {
         let imageView = UIImageView()
         return imageView
@@ -75,12 +97,26 @@ class FeedCell: UITableViewCell {
         
         return view
     }()
+    let commentsStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.alignment = .fill
+        sv.distribution = .fillEqually
+        return sv
+    }()
     let commentsButton: UIButton = {
-       let button = UIButton()
+        let button = UIButton()
         button.backgroundColor = .systemPurple
         return button
     }()
-    
+    let commentsCountLabel: UILabel = {
+        let label = UILabel()
+        label.backgroundColor = .systemRed
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.text = "112"
+        label.textAlignment = .center
+        return label
+    }()
     let rateView: UIView = {
         let view = UIView()
         view.backgroundColor = .systemPurple
@@ -89,6 +125,7 @@ class FeedCell: UITableViewCell {
         
         return view
     }()
+
     let rateStackView: UIStackView = {
        let sv = UIStackView()
         sv.axis = .horizontal
@@ -99,26 +136,29 @@ class FeedCell: UITableViewCell {
         
         return sv
     }()
-    let upButton: UIButton = {
+    let upvoteButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemPurple
         return button
     }()
     let rateLabel: UILabel = {
         let label = UILabel()
-        label.text = "1.3k"
+        label.text = "21.3k"
         label.textAlignment = .center
+        label.font = .systemFont(ofSize: 14, weight: .semibold)
         label.backgroundColor = .systemRed
         return label
     }()
-    let downButton: UIButton = {
+    let downvoteButton: UIButton = {
         let button = UIButton()
         button.backgroundColor = .systemPurple
         return button
     }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        contentView.backgroundColor = .systemGray6
+        /*
         cvLayout = UICollectionViewFlowLayout()
         imagesCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: cvLayout)
         cvLayout.scrollDirection = .horizontal
@@ -129,7 +169,7 @@ class FeedCell: UITableViewCell {
         imagesCollectionView.delegate = self
         imagesCollectionView.dataSource = self
         imagesCollectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: ImagesCollectionViewCell.identifier)
-        
+        */
         addSubviewsAndConfigureConstraints()
         
     }
@@ -137,12 +177,11 @@ class FeedCell: UITableViewCell {
     required init?(coder: NSCoder) {
             fatalError("init(coder:) has not been implemented")
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        configureItemSize()
+    override func prepareForReuse() {
+        super.prepareForReuse()
+       
     }
-    
-// NOTE: imagesCollectionView configuring layout
+// MARK: imagesCollectionView configuring layout
     
     func configureItemSize(){
         let inset = calculateSectionInset()
@@ -161,10 +200,10 @@ class FeedCell: UITableViewCell {
         //
         
         contentView.addSubview(mainView, layoutAnchors: [
-            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: -10),
-            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: -10),
-            .centerX(0),
-            .centerY(0)])
+            .top(10),
+            .trailing(-10),
+            .bottom(-10),
+            .leading(10)])
         
         //
         //  headerView
@@ -172,9 +211,65 @@ class FeedCell: UITableViewCell {
         
         mainView.addSubview(headerView, layoutAnchors: [
             .top(0),
-            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
-            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.15, constant: 0),
-            .centerX(0)])
+            .leading(0),
+            .trailing(0),
+            .height(70)])
+        
+        //
+        //  footerView
+        //
+        
+        mainView.addSubview(footerView, layoutAnchors: [
+            .bottom(0),
+            .leading(0),
+            .trailing(0),
+            .height(70)
+        ])
+        
+        //
+        //  postImageView
+        //
+        
+        mainView.addSubview(postImageView, layoutAnchors: [
+            .leading(0),
+            .trailing(0)
+        ])
+        postImageViewConstraint = NSLayoutConstraint(from: postImageView, to: nil, anchor: .height(0))
+        postImageViewConstraint.isActive = true
+        
+        postImageView.activate(layoutAnchors: [
+            .relative(attribute: .bottom, relation: .equal, relatedTo: .top, multiplier: 1, constant: 0)
+        ], to: footerView)
+        
+        //
+        //  postLabel
+        //
+        mainView.addSubview(postLabel, layoutAnchors: [
+            .leading(10),
+            .trailing(-10)
+        
+        ])
+        
+        postLabel.activate(layoutAnchors: [
+            .relative(attribute: .bottom, relation: .equal, relatedTo: .top, multiplier: 1, constant: 0)
+        ], to: postImageView)
+        
+        //
+        //  contentHeaderLabel
+        //
+        
+        mainView.addSubview(contentHeaderLabel, layoutAnchors: [
+            .leading(10),
+            .trailing(-10)
+        ])
+        
+        contentHeaderLabel.activate(layoutAnchors: [
+            .relative(attribute: .top, relation: .equal, relatedTo: .bottom, multiplier: 1, constant: 0)
+        ], to: headerView)
+        
+        contentHeaderLabel.activate(layoutAnchors: [
+            .relative(attribute: .bottom, relation: .equal, relatedTo: .top, multiplier: 1, constant: 0)
+        ], to: postLabel)
         
         //
         //  subredditImageView
@@ -221,55 +316,20 @@ class FeedCell: UITableViewCell {
         headerLabelButtonsStackView.addArrangedSubview(redditUserNameButton)
         
         //
-        //  footerView
+        //  commentsStackView
         //
-        
-        mainView.addSubview(footerView, layoutAnchors: [
-            .centerX(0),
-            .bottom(0),
-            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
-            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.15, constant: 0)
-        ])
-        
-        //
-        //  commentsButton
-        //
-        
-        footerView.addSubview(commentsButton, layoutAnchors: [
+        commentsStackView.addArrangedSubview(commentsButton)
+        commentsStackView.addArrangedSubview(commentsCountLabel)
+        footerView.addSubview(commentsStackView, layoutAnchors: [
             .leading(10),
             .centerY(0),
             .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.6, constant: 0)
         ])
-        commentsButton.activate(layoutAnchors: [
-            .relative(attribute: .width, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)
-        ], to: commentsButton)
+        commentsStackView.activate(layoutAnchors: [
+            .relative(attribute: .width, relation: .equal, relatedTo: .height, multiplier: 2, constant: 0)
+        ], to: commentsStackView)
         
-        //
-        //  contentHeaderLabel
-        //
         
-        mainView.addSubview(contentHeaderLabel, layoutAnchors: [
-            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
-            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.15, constant: 0)
-        ])
-        contentHeaderLabel.activate(layoutAnchors: [
-            .relative(attribute: .top, relation: .equal, relatedTo: .bottom, multiplier: 1, constant: 0),
-        ], to: headerView)
-        
-        //
-        //  imagesCollectionView
-        //
-        
-        mainView.addSubview(imagesCollectionView, layoutAnchors: [
-            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.55, constant: 0),
-            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0)
-        ])
-        imagesCollectionView.activate(layoutAnchors: [
-            .relative(attribute: .top, relation: .equal, relatedTo: .bottom, multiplier: 1, constant: 0)
-        ], to: contentHeaderLabel)
-        imagesCollectionView.activate(layoutAnchors: [
-            .relative(attribute: .bottom, relation: .equal, relatedTo: .top, multiplier: 1, constant: 0)
-        ], to: footerView)
         
         //
         //  rateStackView
@@ -286,9 +346,9 @@ class FeedCell: UITableViewCell {
             .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 3, constant: 0)
         ], to: commentsButton)
         
-        rateStackView.addArrangedSubview(downButton)
+        rateStackView.addArrangedSubview(downvoteButton)
         rateStackView.addArrangedSubview(rateLabel)
-        rateStackView.addArrangedSubview(upButton)
+        rateStackView.addArrangedSubview(upvoteButton)
         
     }
 }
