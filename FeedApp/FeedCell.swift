@@ -24,14 +24,12 @@ class FeedCell: UITableViewCell {
     }()
     let headerView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemPink
         return view
     }()
     let subredditImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .systemPurple
-        imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 15
         imageView.layer.masksToBounds = true
         return imageView
@@ -41,31 +39,26 @@ class FeedCell: UITableViewCell {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
-        stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.distribution = .equalSpacing
         stackView.backgroundColor = .darkGray
         return stackView
     }()
     let subredditNameButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     let redditUserNameButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     let settingsButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor  = .systemPurple
         return button
         
     }()
     let contentHeaderLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.backgroundColor = .systemPurple
         
         return label
@@ -78,21 +71,18 @@ class FeedCell: UITableViewCell {
     }()
     let footerView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemPink
         
         return view
     }()
     let commentsButton: UIButton = {
        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemPurple
         return button
     }()
     
     let rateView: UIView = {
         let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .systemPurple
         view.layer.cornerRadius = 15
         view.layer.masksToBounds = true
@@ -101,7 +91,6 @@ class FeedCell: UITableViewCell {
     }()
     let rateStackView: UIStackView = {
        let sv = UIStackView()
-        sv.translatesAutoresizingMaskIntoConstraints = false
         sv.axis = .horizontal
         sv.alignment = .fill
         sv.distribution = .fillEqually
@@ -112,13 +101,11 @@ class FeedCell: UITableViewCell {
     }()
     let upButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemPurple
         return button
     }()
     let rateLabel: UILabel = {
         let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "1.3k"
         label.textAlignment = .center
         label.backgroundColor = .systemRed
@@ -126,23 +113,11 @@ class FeedCell: UITableViewCell {
     }()
     let downButton: UIButton = {
         let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .systemPurple
         return button
     }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        
-        headerLabelButtonsStackView.addArrangedSubview(subredditNameButton)
-        headerLabelButtonsStackView.addArrangedSubview(redditUserNameButton)
-        
-        contentView.addSubview(mainView, [.relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: <#T##CGFloat#>, constant: <#T##CGFloat#>)])
-        mainView.addSubview(headerView)
-        
-        headerView.addSubview(subredditImageView)
-        headerView.addSubview(headerLabelButtonsStackView)
-        headerView.addSubview(settingsButton)
         
         cvLayout = UICollectionViewFlowLayout()
         imagesCollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: cvLayout)
@@ -155,22 +130,7 @@ class FeedCell: UITableViewCell {
         imagesCollectionView.dataSource = self
         imagesCollectionView.register(ImagesCollectionViewCell.self, forCellWithReuseIdentifier: ImagesCollectionViewCell.identifier)
         
-        
-        mainView.addSubview(contentHeaderLabel)
-        
-        
-        mainView.addSubview(imagesCollectionView)
-        
-        mainView.addSubview(footerView)
-        
-        footerView.addSubview(commentsButton)
-        footerView.addSubview(rateStackView)
-        
-        rateStackView.addArrangedSubview(downButton)
-        rateStackView.addArrangedSubview(rateLabel)
-        rateStackView.addArrangedSubview(upButton)
-        
-        configureConstraints()
+        addSubviewsAndConfigureConstraints()
         
     }
         
@@ -192,83 +152,147 @@ class FeedCell: UITableViewCell {
     func calculateSectionInset() -> CGFloat {
         let itemWidth = imagesCollectionView.frame.width * 0.8
         
-        return (imagesCollectionView.frame.size.width - itemWidth) / 2
+        return (imagesCollectionView.frame.width - itemWidth) / 2
     }
-    func configureConstraints() {
-        NSLayoutConstraint.activate([
-            //
-            // mainView
-            //
-            mainView.heightAnchor.constraint(equalTo: self.contentView.heightAnchor, constant: -10),
-            mainView.widthAnchor.constraint(equalTo: self.contentView.widthAnchor, constant: -10),
-            mainView.centerXAnchor.constraint(equalTo: self.contentView.centerXAnchor),
-            mainView.centerYAnchor.constraint(equalTo: self.contentView.centerYAnchor),
-            //
-            // headerView
-            //
-            headerView.widthAnchor.constraint(equalTo: mainView.widthAnchor),
-            headerView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
-            headerView.heightAnchor.constraint(equalTo: mainView.heightAnchor, multiplier: 0.15),
-            headerView.topAnchor.constraint(equalTo: mainView.topAnchor),
-            //
-            // subredditImageView
-            //
-            subredditImageView.centerYAnchor.constraint(equalTo: headerView.centerYAnchor),
-            subredditImageView.leftAnchor.constraint(equalTo: headerView.leftAnchor, constant: 10),
-            subredditImageView.heightAnchor.constraint(equalTo: headerView.heightAnchor, multiplier: 0.7),
-            subredditImageView.widthAnchor.constraint(equalTo: subredditImageView.heightAnchor),
-            //
-            // headerLabelButtonsStackView
-            //
-            headerLabelButtonsStackView.centerYAnchor.constraint(equalTo: subredditImageView.centerYAnchor),
-            headerLabelButtonsStackView.leftAnchor.constraint(equalTo: subredditImageView.rightAnchor),
-            headerLabelButtonsStackView.heightAnchor.constraint(equalTo: subredditImageView.heightAnchor),
-            headerLabelButtonsStackView.rightAnchor.constraint(equalTo: settingsButton.leftAnchor),
-            //
-            // settingsButton
-            //
-            settingsButton.rightAnchor.constraint(equalTo: headerView.rightAnchor, constant: -10),
-            settingsButton.centerYAnchor.constraint(equalTo: subredditImageView.centerYAnchor),
-            settingsButton.heightAnchor.constraint(equalTo: subredditImageView.heightAnchor),
-            settingsButton.widthAnchor.constraint(equalTo: settingsButton.heightAnchor),
-            //
-            // footerView
-            //
-            footerView.centerXAnchor.constraint(equalTo: mainView.centerXAnchor),
-            footerView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor),
-            footerView.widthAnchor.constraint(equalTo: mainView.widthAnchor),
-            footerView.heightAnchor.constraint(equalTo: mainView.heightAnchor, multiplier: 0.15),
-            //
-            // commentsButton
-            //
-            commentsButton.centerYAnchor.constraint(equalTo: footerView.centerYAnchor),
-            commentsButton.leftAnchor.constraint(equalTo: footerView.leftAnchor, constant: 10),
-            commentsButton.heightAnchor.constraint(equalTo: footerView.heightAnchor, multiplier: 0.6),
-            commentsButton.widthAnchor.constraint(equalTo: commentsButton.heightAnchor),
-            //
-            // contentHeaderLabel
-            //
-            contentHeaderLabel.topAnchor.constraint(equalTo: headerView.bottomAnchor),
-            contentHeaderLabel.bottomAnchor.constraint(equalTo: imagesCollectionView.topAnchor),
-            contentHeaderLabel.widthAnchor.constraint(equalTo: mainView.widthAnchor),
-            contentHeaderLabel.heightAnchor.constraint(equalTo: mainView.heightAnchor, multiplier: 0.15),
-            //
-            // imagesCollectionView
-            //
-            imagesCollectionView.topAnchor.constraint(equalTo: contentHeaderLabel.bottomAnchor),
-            imagesCollectionView.bottomAnchor.constraint(equalTo: footerView.topAnchor),
-            imagesCollectionView.widthAnchor.constraint(equalTo: mainView.widthAnchor),
-            imagesCollectionView.heightAnchor.constraint(equalTo: mainView.heightAnchor, multiplier: 0.55),
-            //
-            // rateStackView
-            //
-            rateStackView.centerYAnchor.constraint(equalTo: commentsButton.centerYAnchor),
-            rateStackView.heightAnchor.constraint(equalTo: commentsButton.heightAnchor),
-            rateStackView.widthAnchor.constraint(equalTo: commentsButton.widthAnchor, multiplier: 3),
-            rateStackView.rightAnchor.constraint(equalTo: footerView.rightAnchor, constant: -10)
+    func addSubviewsAndConfigureConstraints() {
+        
+        //
+        //  mainView
+        //
+        
+        contentView.addSubview(mainView, layoutAnchors: [
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: -10),
+            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: -10),
+            .centerX(0),
+            .centerY(0)])
+        
+        //
+        //  headerView
+        //
+        
+        mainView.addSubview(headerView, layoutAnchors: [
+            .top(0),
+            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.15, constant: 0),
+            .centerX(0)])
+        
+        //
+        //  subredditImageView
+        //
+        
+        headerView.addSubview(subredditImageView, layoutAnchors: [
+            .leading(10),
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.7, constant: 0),
+            .centerY(0)
         ])
+        subredditImageView.activate(layoutAnchors: [.relative(attribute: .width, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)], to: subredditImageView)
+        
+        //
+        //  settingsButton
+        //
+        
+        headerView.addSubview(settingsButton, layoutAnchors: [
+            .trailing(-10),
+            .centerY(0)
+        ])
+        settingsButton.activate(layoutAnchors: [
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)
+        ], to: subredditImageView)
+        settingsButton.activate(layoutAnchors: [
+            .relative(attribute: .width, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)
+        ], to: settingsButton)
+        
+        //
+        //  headerLabelButtonsStackView
+        //
+        
+        headerView.addSubview(headerLabelButtonsStackView, layoutAnchors: [
+            .centerY(0)
+        ])
+        headerLabelButtonsStackView.activate(layoutAnchors: [
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0),
+            .relative(attribute: .left, relation: .equal, relatedTo: .right, multiplier: 1, constant: 0)
+        ], to: subredditImageView)
+        headerLabelButtonsStackView.activate(layoutAnchors: [
+            .relative(attribute: .right, relation: .equal, relatedTo: .left, multiplier: 1, constant: 0)
+        ], to: settingsButton)
+        
+        headerLabelButtonsStackView.addArrangedSubview(subredditNameButton)
+        headerLabelButtonsStackView.addArrangedSubview(redditUserNameButton)
+        
+        //
+        //  footerView
+        //
+        
+        mainView.addSubview(footerView, layoutAnchors: [
+            .centerX(0),
+            .bottom(0),
+            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.15, constant: 0)
+        ])
+        
+        //
+        //  commentsButton
+        //
+        
+        footerView.addSubview(commentsButton, layoutAnchors: [
+            .leading(10),
+            .centerY(0),
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.6, constant: 0)
+        ])
+        commentsButton.activate(layoutAnchors: [
+            .relative(attribute: .width, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)
+        ], to: commentsButton)
+        
+        //
+        //  contentHeaderLabel
+        //
+        
+        mainView.addSubview(contentHeaderLabel, layoutAnchors: [
+            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.15, constant: 0)
+        ])
+        contentHeaderLabel.activate(layoutAnchors: [
+            .relative(attribute: .top, relation: .equal, relatedTo: .bottom, multiplier: 1, constant: 0),
+        ], to: headerView)
+        
+        //
+        //  imagesCollectionView
+        //
+        
+        mainView.addSubview(imagesCollectionView, layoutAnchors: [
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.55, constant: 0),
+            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0)
+        ])
+        imagesCollectionView.activate(layoutAnchors: [
+            .relative(attribute: .top, relation: .equal, relatedTo: .bottom, multiplier: 1, constant: 0)
+        ], to: contentHeaderLabel)
+        imagesCollectionView.activate(layoutAnchors: [
+            .relative(attribute: .bottom, relation: .equal, relatedTo: .top, multiplier: 1, constant: 0)
+        ], to: footerView)
+        
+        //
+        //  rateStackView
+        //
+        
+        footerView.addSubview(rateStackView, layoutAnchors: [
+            .centerY(0),
+            .trailing(-10)
+        ])
+        
+        
+        rateStackView.activate(layoutAnchors: [
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0),
+            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 3, constant: 0)
+        ], to: commentsButton)
+        
+        rateStackView.addArrangedSubview(downButton)
+        rateStackView.addArrangedSubview(rateLabel)
+        rateStackView.addArrangedSubview(upButton)
+        
     }
 }
+
 extension FeedCell: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 3
