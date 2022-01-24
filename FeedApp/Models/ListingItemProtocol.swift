@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ListingItem{
+protocol ListingItem {
     var id: String {get}
     var name: String {get}
     static var kind: String {get}

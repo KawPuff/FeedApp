@@ -11,8 +11,8 @@ struct Link: ListingItem {
     
     init(id: String) {
         self.id = id
-        name = ""
-        subreddit = ""
+        self.name = ""
+        self.subreddit = ""
     }
     
     let id: String

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Listing{
+struct Listing {
     var after: String
     var dist: Int
     var children: [ListingItem]

@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct ContentModel{
+struct ContentModel {
     var kind: String
     var data: Listing
+    
+}
+struct SomeModel: Codable {
+    
 }
