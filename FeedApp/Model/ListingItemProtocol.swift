@@ -12,5 +12,4 @@ protocol ListingItem {
     var name: String {get}
     static var kind: String {get}
     
-    init(id: String)
 }

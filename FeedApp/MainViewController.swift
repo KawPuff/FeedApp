@@ -24,7 +24,9 @@ class MainViewController: UIViewController {
         feedTableView.register(FeedCell.self, forCellReuseIdentifier: FeedCell.identifier)
         feedTableView.delegate = self
         feedTableView.dataSource = self
-        
+        RedditManager.shared.getPosts(subreddit: "", limit: 0) { result in
+            
+        }
         navigationController?.navigationBar.prefersLargeTitles = true
         title = "Home"
         view.addSubview(feedTableView, layoutAnchors: [.leading(0), .trailing(0), .bottom(0), .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.8, constant: 0)])

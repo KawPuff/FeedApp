@@ -11,7 +11,7 @@ protocol RedditMangerProtocol{
     
     static var shared: RedditMangerProtocol { get }
     
-    func getPosts(subreddit: String, limit: Int, _ completion: @escaping (Result<ContentModel>) -> Void)
+    func getPosts(subreddit: String, limit: Int, _ completion: @escaping (Result<Listing>) -> Void)
     
 }
 class RedditManager: RedditMangerProtocol {
@@ -21,10 +21,8 @@ class RedditManager: RedditMangerProtocol {
     }
     public static var shared: RedditMangerProtocol = RedditManager()
     
-    func getPosts(subreddit: String, limit: Int, _ completion: @escaping (Result<ContentModel>) -> Void) {
-        guard let url = URL(string: "https://www.reddit.com/r/" + subreddit +
-                                    ".json?limit=" + String(limit) +
-                                    "")
+    func getPosts(subreddit: String, limit: Int, _ completion: @escaping (Result<Listing>) -> Void) {
+        guard let url = URL(string: "https://www.reddit.com/r/popular.json")
         else {
             completion(.failure("Url not found"))
             return
@@ -41,13 +39,18 @@ class RedditManager: RedditMangerProtocol {
                 completion(.failure("No data found"))
                 return
             }
-            
-            guard let parsedData = try? JSONDecoder().decode(SomeModel.self, from: data) else {
-                completion(.failure("Error parsing data"))
+            guard let object = try? JSONSerialization.jsonObject(with: data, options: []) else {
+                print("Error creating jsonObject")
                 return
             }
+            guard let jsonDictionary = object as? JSONDictionary, let listingJson = jsonDictionary["data"] as? JSONDictionary else {
+                print("Error creating jsonDictionary")
+                return
+            }
+            
             DispatchQueue.main.async {
-                completion(.success(parsedData))
+                let listing = Listing(json: listingJson)
+                completion(.success(listing))
             }
             
         }.resume()

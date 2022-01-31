@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		EF0DA5FF2799F22100F6AEBB /* ContentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA5FE2799F22100F6AEBB /* ContentModel.swift */; };
 		EF0DA6012799F32600F6AEBB /* Listing.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA6002799F32600F6AEBB /* Listing.swift */; };
 		EF0DA6052799F42000F6AEBB /* Link.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA6042799F42000F6AEBB /* Link.swift */; };
 		EF0DA6072799F6AB00F6AEBB /* ListingItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA6062799F6AB00F6AEBB /* ListingItemProtocol.swift */; };
 		EF0DA609279F34C100F6AEBB /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA608279F34C100F6AEBB /* Result.swift */; };
+		EF0DA60B27A2BE6700F6AEBB /* JSONDictonary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA60A27A2BE6700F6AEBB /* JSONDictonary.swift */; };
 		EF3846D9276B58F5006DCDDC /* FeedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3846D8276B58F5006DCDDC /* FeedCell.swift */; };
 		EF3846DB276D547F006DCDDC /* ImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3846DA276D547F006DCDDC /* ImagesCollectionViewCell.swift */; };
 		EF5848492786FB490069F684 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5848482786FB490069F684 /* UIViewExtension.swift */; };
@@ -26,11 +26,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		EF0DA5FE2799F22100F6AEBB /* ContentModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentModel.swift; sourceTree = "<group>"; };
 		EF0DA6002799F32600F6AEBB /* Listing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Listing.swift; sourceTree = "<group>"; };
 		EF0DA6042799F42000F6AEBB /* Link.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Link.swift; sourceTree = "<group>"; };
 		EF0DA6062799F6AB00F6AEBB /* ListingItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingItemProtocol.swift; sourceTree = "<group>"; };
 		EF0DA608279F34C100F6AEBB /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
+		EF0DA60A27A2BE6700F6AEBB /* JSONDictonary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSONDictonary.swift; path = FeedApp/JSONDictonary.swift; sourceTree = SOURCE_ROOT; };
 		EF3846D8276B58F5006DCDDC /* FeedCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedCell.swift; sourceTree = "<group>"; };
 		EF3846DA276D547F006DCDDC /* ImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		EF5848482786FB490069F684 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
@@ -57,15 +57,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		EF0DA5FD2799F1D400F6AEBB /* Models */ = {
+		EF0DA5FD2799F1D400F6AEBB /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				EF0DA5FE2799F22100F6AEBB /* ContentModel.swift */,
 				EF0DA6002799F32600F6AEBB /* Listing.swift */,
+				EF0DA60A27A2BE6700F6AEBB /* JSONDictonary.swift */,
 				EF0DA6042799F42000F6AEBB /* Link.swift */,
 				EF0DA6062799F6AB00F6AEBB /* ListingItemProtocol.swift */,
 			);
-			path = Models;
+			path = Model;
 			sourceTree = "<group>";
 		};
 		EF58484C278705D10069F684 /* AutoLayoutDSL */ = {
@@ -97,7 +97,7 @@
 		EFBD99522767C3A400373FBF /* FeedApp */ = {
 			isa = PBXGroup;
 			children = (
-				EF0DA5FD2799F1D400F6AEBB /* Models */,
+				EF0DA5FD2799F1D400F6AEBB /* Model */,
 				EF58484C278705D10069F684 /* AutoLayoutDSL */,
 				EFBD99532767C3A400373FBF /* AppDelegate.swift */,
 				EFBD99552767C3A500373FBF /* SceneDelegate.swift */,
@@ -185,6 +185,7 @@
 			files = (
 				EFBD99682767C47F00373FBF /* MainViewController.swift in Sources */,
 				EF58484E278706030069F684 /* NSLayoutConstraintExtension.swift in Sources */,
+				EF0DA60B27A2BE6700F6AEBB /* JSONDictonary.swift in Sources */,
 				EF3846D9276B58F5006DCDDC /* FeedCell.swift in Sources */,
 				EF0DA6052799F42000F6AEBB /* Link.swift in Sources */,
 				EF0DA609279F34C100F6AEBB /* Result.swift in Sources */,
@@ -194,7 +195,6 @@
 				EF5848492786FB490069F684 /* UIViewExtension.swift in Sources */,
 				EF0DA6012799F32600F6AEBB /* Listing.swift in Sources */,
 				EF58484B2786FCCB0069F684 /* LayoutAnchor.swift in Sources */,
-				EF0DA5FF2799F22100F6AEBB /* ContentModel.swift in Sources */,
 				EF3846DB276D547F006DCDDC /* ImagesCollectionViewCell.swift in Sources */,
 				EFBD99562767C3A500373FBF /* SceneDelegate.swift in Sources */,
 			);
