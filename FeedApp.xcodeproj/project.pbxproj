@@ -17,6 +17,7 @@
 		EF5848492786FB490069F684 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5848482786FB490069F684 /* UIViewExtension.swift */; };
 		EF58484B2786FCCB0069F684 /* LayoutAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF58484A2786FCCB0069F684 /* LayoutAnchor.swift */; };
 		EF58484E278706030069F684 /* NSLayoutConstraintExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF58484D278706030069F684 /* NSLayoutConstraintExtension.swift */; };
+		EF987BF1278E1A580003B4A1 /* blond.jpg in Resources */ = {isa = PBXBuildFile; fileRef = EF987BF0278E1A580003B4A1 /* blond.jpg */; };
 		EFBD99542767C3A400373FBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBD99532767C3A400373FBF /* AppDelegate.swift */; };
 		EFBD99562767C3A500373FBF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBD99552767C3A500373FBF /* SceneDelegate.swift */; };
 		EFBD995D2767C3AB00373FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFBD995C2767C3AB00373FBF /* Assets.xcassets */; };
@@ -36,6 +37,7 @@
 		EF5848482786FB490069F684 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		EF58484A2786FCCB0069F684 /* LayoutAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutAnchor.swift; sourceTree = "<group>"; };
 		EF58484D278706030069F684 /* NSLayoutConstraintExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSLayoutConstraintExtension.swift; sourceTree = "<group>"; };
+		EF987BF0278E1A580003B4A1 /* blond.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = blond.jpg; sourceTree = "<group>"; };
 		EFBD99502767C3A400373FBF /* FeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFBD99532767C3A400373FBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFBD99552767C3A500373FBF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +78,14 @@
 				EF58484D278706030069F684 /* NSLayoutConstraintExtension.swift */,
 			);
 			path = AutoLayoutDSL;
+			sourceTree = "<group>";
+		};
+		EF987BEF278E1A490003B4A1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				EF987BF0278E1A580003B4A1 /* blond.jpg */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		EFBD99472767C3A400373FBF = {
@@ -172,6 +182,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EFBD99602767C3AB00373FBF /* LaunchScreen.storyboard in Resources */,
+				EF987BF1278E1A580003B4A1 /* blond.jpg in Resources */,
 				EFBD995D2767C3AB00373FBF /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
