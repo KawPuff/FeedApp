@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Result<A>{
-    case success(A)
+public enum Result<Model>{
+    case success(Model)
     case failure(String)
 }
