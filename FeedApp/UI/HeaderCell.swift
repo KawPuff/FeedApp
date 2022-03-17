@@ -1,13 +1,24 @@
 //
-//  FeedCellHeader.swift
+//  HeaderCell.swift
 //  FeedApp
 //
-//  Created by Дмитрий Мартьянов on 01.02.2022.
+//  Created by Дмитрий Мартьянов on 10.02.2022.
 //
 
 import UIKit
 
-class FeedCellHeader: UIView {
+class HeaderCell: UITableViewCell {
+    
+    static public let identifier = "HeaderCell"
+    
+    public let mainView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemPink
+        view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        view.layer.cornerRadius = 14
+        view.layer.masksToBounds = true
+        return view
+    }()
     
     public let subredditImageView: UIImageView = {
         let imageView = UIImageView()
@@ -50,11 +61,10 @@ class FeedCellHeader: UIView {
         
     }()
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
     }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
@@ -66,10 +76,16 @@ class FeedCellHeader: UIView {
         subredditImageView.layer.cornerRadius = subredditImageView.frame.width / 2
     }
     func setupViews() {
+        contentView.addSubview(mainView, layoutAnchors: [
+            .leading(15),
+            .trailing(-15),
+            .top(10),
+            .bottom(0)
+        ])
         //
         //  subredditImageView
         //
-        self.addSubview(subredditImageView, layoutAnchors: [
+        mainView.addSubview(subredditImageView, layoutAnchors: [
             .leading(10),
             .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 0.7, constant: 0),
             .centerY(0)
@@ -80,7 +96,7 @@ class FeedCellHeader: UIView {
         //  settingsButton
         //
         
-        self.addSubview(settingsButton, layoutAnchors: [
+        mainView.addSubview(settingsButton, layoutAnchors: [
             .trailing(-10),
             .centerY(0)
         ])
@@ -95,7 +111,7 @@ class FeedCellHeader: UIView {
         //  headerLabelButtonsStackView
         //
         
-        self.addSubview(headerLabelButtonsStackView, layoutAnchors: [
+        mainView.addSubview(headerLabelButtonsStackView, layoutAnchors: [
             .centerY(0)
         ])
         headerLabelButtonsStackView.activate(layoutAnchors: [
@@ -109,4 +125,5 @@ class FeedCellHeader: UIView {
         headerLabelButtonsStackView.addArrangedSubview(subredditNameButton)
         headerLabelButtonsStackView.addArrangedSubview(redditUserNameButton)
     }
+
 }

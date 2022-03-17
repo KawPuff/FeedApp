@@ -7,23 +7,26 @@
 
 import Foundation
 
-protocol RedditMangerProtocol{
+protocol NetworkManager {
     
-    static var shared: RedditMangerProtocol { get }
+    static var shared: NetworkManager { get }
     
-    func getPosts(subreddit: String, limit: Int, _ completion: @escaping (Result<Listing>) -> Void)
+    func getPosts(subreddit: String, limit: Int, after itemName: String?,_ completion: @escaping (Result<Listing>) -> Void)
     
 }
-class RedditManager: RedditMangerProtocol {
+class RedditManager: NetworkManager {
     
     private init() {
         
     }
-    public static var shared: RedditMangerProtocol = RedditManager()
     
-    func getPosts(subreddit: String, limit: Int, _ completion: @escaping (Result<Listing>) -> Void) {
-        guard let url = URL(string: "https://www.reddit.com/r/popular.json")
-        else {
+    public static var shared: NetworkManager = RedditManager()
+    
+    func getPosts(subreddit: String, limit: Int = 25, after itemName: String? = nil, _ completion: @escaping (Result<Listing>) -> Void) {
+        let itemName = itemName ?? ""
+        
+        let urlString = "https://www.reddit.com/r/\(subreddit).json?limit=\(limit)" + (itemName.isEmpty ? "" : "&after=" + itemName)
+        guard let url = URL(string: urlString) else {
             completion(.failure("Url not found"))
             return
         }
@@ -31,8 +34,8 @@ class RedditManager: RedditMangerProtocol {
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) { data, _ , error in
-            guard error == nil else {
-                completion(.failure(error!.localizedDescription))
+            if let error = error {
+                completion(.failure(error.localizedDescription))
                 return
             }
             guard let data = data else {
@@ -40,11 +43,11 @@ class RedditManager: RedditMangerProtocol {
                 return
             }
             guard let object = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                print("Error creating jsonObject")
+                completion(.failure("Error serialize json object."))
                 return
             }
             guard let jsonDictionary = object as? JSONDictionary, let listingJson = jsonDictionary["data"] as? JSONDictionary else {
-                print("Error creating jsonDictionary")
+                completion(.failure("Error creating jsonDictionary"))
                 return
             }
             

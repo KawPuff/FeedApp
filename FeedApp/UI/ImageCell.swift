@@ -7,9 +7,9 @@
 
 import UIKit
 
-class ImagesCollectionViewCell: UICollectionViewCell {
+class ImageCell: UICollectionViewCell {
     
-    public static let identifier = "ImagesCollectionViewCell"
+    public static let identifier = "ImageCell"
     
     let contentImageView: UIImageView = {
         let imageView = UIImageView()
@@ -18,17 +18,6 @@ class ImagesCollectionViewCell: UICollectionViewCell {
     }()
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-//        self.contentView.addSubview(contentImageView, layoutAnchors: [
-//            .centerX(0),
-//            .centerY(0),
-//            .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 1, constant: 0),
-//            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)
-//        ])
-//        self.layer.cornerRadius = 15
-//        self.layer.masksToBounds = true
-//        
-//        configureConstraints()
     }
     
     required init?(coder: NSCoder) {
