@@ -7,7 +7,7 @@
 
 import UIKit
 
-class LinkCell: UITableViewCell {
+final class LinkCell: UITableViewCell {
 
     static let identifier = "LinkCell"
     

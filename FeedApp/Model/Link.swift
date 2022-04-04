@@ -13,6 +13,7 @@ struct Link: ListingItem {
     let subreddit: String
     let selftext: String
     let title: String
+    let author: String
 //    let downs: String
 //    let ups: String
     let score: Int64
@@ -28,6 +29,7 @@ struct Link: ListingItem {
         self.subreddit = ""
         self.selftext = ""
         self.title = ""
+        self.author = ""
         self.score = 0
         self.url = ""
         self.isVideo = false
@@ -37,10 +39,11 @@ struct Link: ListingItem {
     init(json: JSONDictionary) {
         self.id = json["id"] as? String ?? ""
         self.name = json["name"] as? String ?? ""
-        self.subreddit = json["subreddit"] as? String ?? ""
+        self.subreddit = json["subreddit_name_prefixed"] as? String ?? ""
         self.selftext = json["selftext"] as? String ?? ""
         if !self.selftext.isEmpty { self.kind = .text}
         self.title = json["title"] as? String ?? ""
+        self.author = json["author"] as? String ?? ""
         self.score = json["score"] as? Int64 ?? 0
         self.url = json["url"] as? String ?? ""
         self.isVideo = json["is_video"] as? Bool ?? false
