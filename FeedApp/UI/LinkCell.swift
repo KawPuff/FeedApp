@@ -9,57 +9,85 @@ import UIKit
 
 final class LinkCell: UITableViewCell {
 
-    static let identifier = "LinkCell"
+    static let identifier: String = "LinkCell"
     
-    let title: UITextView = {
-        let tv = UITextView()
-        tv.isScrollEnabled = false
-        tv.isEditable = false
-        tv.font = .systemFont(ofSize: 21, weight: .semibold)
-        tv.backgroundColor = .systemTeal
-        tv.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        
-        return tv
-    }()
-    let linkView: UIView = {
+    var delegate: LinkOpenerDelegate?
+    
+    var urlString: String = ""
+    
+    private let mainView: UIView = {
         let view = UIView()
-        view.backgroundColor = .orange
+        view.backgroundColor = .white
         return view
+    }()
+    
+    let preview: UIImageView = {
+        let iv = UIImageView()
+        iv.backgroundColor = .orange
+        iv.layer.cornerRadius = 12
+        iv.isUserInteractionEnabled = true //Отвечает за доступ к событиям
+        iv.layer.masksToBounds = true
+        return iv
+    }()
+    
+    private let titleBackground: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black.withAlphaComponent(0.5)
+        return view
+    }()
+    
+    let domainTitle: UILabel = {
+        let label = UILabel()
+        label.numberOfLines = 1
+        label.font = .systemFont(ofSize: 10, weight: .semibold)
+
+        label.textColor = .white
+        label.textAlignment = .right
+        return label
     }()
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(previewPressed))
+        preview.addGestureRecognizer(recognizer)
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+        let recognizer = UITapGestureRecognizer(target: self, action: #selector(previewPressed))
+        preview.addGestureRecognizer(recognizer)
     }
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        contentView.setNeedsLayout()
-        contentView.layoutIfNeeded()
-
-        let rect = convert(linkView.frame, to: title).offsetBy(dx: 10, dy: 0)
-        let exclutionPath = UIBezierPath(rect: rect)
-        title.textContainer.exclusionPaths = [exclutionPath]
-        
+    @objc func previewPressed(sender: AnyObject) {
+        guard let url = URL(string: urlString), let delegate = delegate else {
+            return
+        }
+        delegate.openLink(url: url)
     }
     private func setupViews() {
-        contentView.addSubview(title, layoutAnchors: [
+        
+        contentView.addSubview(mainView, layoutAnchors: [
             .top(0),
             .bottom(0),
+            .leading(15),
+            .trailing(-15)
+        ])
+        mainView.addSubview(preview, layoutAnchors: [
+            .top(15),
+            .bottom(-15),
+            .leading(15),
+            .trailing(-15)
+        ])
+        preview.addSubview(titleBackground, layoutAnchors: [
+            .bottom(0),
+            .leading(0),
+            .trailing(0),
+            .height(20)
+        ])
+        titleBackground.addSubview(domainTitle, layoutAnchors: [
+            .bottom(0),
+            .top(0),
             .leading(10),
-            .trailing(-20)
+            .trailing(-10)
         ])
-        contentView.addSubview(linkView, layoutAnchors: [
-            .top(10),
-            .trailing(-20),
-            .height(100),
-            .width(120)
-        ])
-        linkView.activate(layoutAnchors: [
-            .relative(attribute: .bottom, relation: .lessThanOrEqual, relatedTo: .bottom, multiplier: 1, constant: -10)
-        ], to: contentView)
     }
 }

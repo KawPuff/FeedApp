@@ -7,13 +7,13 @@
 
 import UIKit
 
-class FooterCell: UITableViewCell {
+final class FooterCell: UITableViewCell {
     
     static public let identifier = "FooterCell"
     
     public let mainView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemPink
+        view.backgroundColor = .white
         view.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
         view.layer.cornerRadius = 14
         view.layer.masksToBounds = true
@@ -28,15 +28,15 @@ class FooterCell: UITableViewCell {
     }()
     public let commentsButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemPurple
+        button.setImage(.init(named: "Comments"), for: .normal)
         return button
     }()
     public let commentsCountLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .systemRed
         label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.textColor = .lightGray
         label.text = "112"
-        label.textAlignment = .center
+        label.textAlignment = .left
         return label
     }()
     public let rateStackView: UIStackView = {
@@ -52,7 +52,7 @@ class FooterCell: UITableViewCell {
 
     public let upvoteButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemPurple
+        button.setImage(.init(named: "Upvote"), for: .normal)
         return button
     }()
     public let rateLabel: UILabel = {
@@ -60,12 +60,12 @@ class FooterCell: UITableViewCell {
         label.text = "21.3k"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 14, weight: .semibold)
-        label.backgroundColor = .systemRed
+        label.textColor = .lightGray
         return label
     }()
     public let downvoteButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .systemPurple
+        button.setImage(.init(named: "Downvote"), for: .normal)
         return button
     }()
     
@@ -114,8 +114,9 @@ class FooterCell: UITableViewCell {
             .relative(attribute: .width, relation: .equal, relatedTo: .width, multiplier: 3, constant: 0)
         ], to: commentsButton)
         
-        rateStackView.addArrangedSubview(downvoteButton)
-        rateStackView.addArrangedSubview(rateLabel)
+        
         rateStackView.addArrangedSubview(upvoteButton)
+        rateStackView.addArrangedSubview(rateLabel)
+        rateStackView.addArrangedSubview(downvoteButton)
     }
 }

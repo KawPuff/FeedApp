@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import SafariServices
 
 final class MainViewController: UIViewController, FeedView {
 
@@ -39,13 +39,12 @@ final class MainViewController: UIViewController, FeedView {
         feedTableView.register(FooterCell.self, forCellReuseIdentifier: FooterCell.identifier)
         feedTableView.register(TitleCell.self, forCellReuseIdentifier: TitleCell.identifier)
         feedTableView.register(TextCell.self, forCellReuseIdentifier: TextCell.identifier)
-        //feedTableView.register(LinkCell.self, forCellReuseIdentifier: LinkCell.identifier)
+        feedTableView.register(LinkCell.self, forCellReuseIdentifier: LinkCell.identifier)
         feedTableView.register(AlbumCell.self, forCellReuseIdentifier: AlbumCell.identifier)
         
         presenter.loadNextPosts { [self] in
             feedTableView.delegate = self
             feedTableView.dataSource = self
-            feedTableView.prefetchDataSource = self
             view.addSubview(feedTableView, layoutAnchors: [
                 .leading(0),
                 .trailing(0),
@@ -57,7 +56,7 @@ final class MainViewController: UIViewController, FeedView {
 }
 
 // MARK: - TableView Delegates
-extension MainViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching{
+extension MainViewController: UITableViewDelegate, UITableViewDataSource {
     
   // MARK: - UITableViewDataSource
     
@@ -70,34 +69,36 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         
         switch indexPath.row {
         
-        case 0, tableView.numberOfRows(inSection: indexPath.section) - 1:
+        case 0, 3:
             return 70
         case 1:
             return UITableView.automaticDimension
+        case 2:
+            
+            // Configure content cells
+            
+            switch presenter.getPostType(indexPath.section){
+                
+            case .titleOnly:
+                return 0
+            case .link:
+                return 150
+            case .photo:
+                return UITableView.automaticDimension
+//                let imgSize = presenter.getImageSizeAt(index: indexPath.section)
+//                let ratio = imgSize.height / tableView.frame.height
+//
+//                return imgSize.height * ratio
+                
+            default:
+                return UITableView.automaticDimension
+            }
+            
         default:
-            break
+            return UITableView.automaticDimension
         }
         
-        // Configure content cells
         
-        switch presenter.getPostType(indexPath.section){
-            
-        case .titleOnly:
-            return 0
-            
-        case .photo:
-            
-            let imgSize = presenter.getImageSizeAt(index: indexPath.section)
-            let ratio = imgSize.height / tableView.frame.height
-            
-            return imgSize.height * ratio
-        
-        case .text:
-            return UITableView.automaticDimension
-            
-        default:
-            return UITableView.automaticDimension
-        }
         
     }
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -160,7 +161,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, UITabl
             case 2:
             
             switch presenter.getPostType(indexPath.section) {
-                
+            
+            case .link:
+                let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.identifier) as! LinkCell
+                cell.backgroundColor = .clear
+                cell.domainTitle.text = "www.google.com"
+                cell.delegate = self
+                return cell
             case .titleOnly:
                 return UITableViewCell()
                 
@@ -168,6 +175,13 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, UITabl
                     
                 let cell = tableView.dequeueReusableCell(withIdentifier: AlbumCell.identifier) as! AlbumCell
                 cell.delegate = self
+                
+                let imgSize = presenter.getImageSizeAt(index: indexPath.section)
+                let ratio = imgSize.height / tableView.frame.height
+                
+                
+                cell.setAlbumHeight(imgSize.height * ratio)
+                
                 cell.backgroundColor = .clear
                     
                 return cell
@@ -176,11 +190,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, UITabl
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextCell.identifier) as! TextCell
                 cell.textView.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
                 cell.backgroundColor = .clear
-                return cell
-                
-            case .link:
-                let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.identifier) as! LinkCell
-                    
                 return cell
             default:
                 break
@@ -216,13 +225,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     }
     
     
-    // MARK: - UITableViewPrefetchDataSource
-    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        for indexPath in indexPaths {
-            print("Prefetched \(indexPath)")
-        }
-        
-    }
+
     
 }
 // MARK: - AlbumDelegate
@@ -237,5 +240,14 @@ extension MainViewController: AlbumDelegate {
         
         return cell
     }
+    
+}
+
+extension MainViewController: LinkOpenerDelegate {
+    func openLink(url: URL) {
+        let svc = SFSafariViewController(url: url)
+        present(svc, animated: true, completion: nil)
+    }
+    
     
 }

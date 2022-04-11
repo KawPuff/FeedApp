@@ -15,6 +15,7 @@
 		EF0DA6072799F6AB00F6AEBB /* ListingItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA6062799F6AB00F6AEBB /* ListingItemProtocol.swift */; };
 		EF0DA609279F34C100F6AEBB /* Result.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA608279F34C100F6AEBB /* Result.swift */; };
 		EF0DA60B27A2BE6700F6AEBB /* JSONDictonary.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF0DA60A27A2BE6700F6AEBB /* JSONDictonary.swift */; };
+		EF1CE61427FCC92A007A7397 /* LinkOpenerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1CE61327FCC92A007A7397 /* LinkOpenerDelegate.swift */; };
 		EF3846DB276D547F006DCDDC /* ImageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF3846DA276D547F006DCDDC /* ImageCell.swift */; };
 		EF5848492786FB490069F684 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF5848482786FB490069F684 /* UIViewExtension.swift */; };
 		EF58484B2786FCCB0069F684 /* LayoutAnchor.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF58484A2786FCCB0069F684 /* LayoutAnchor.swift */; };
@@ -45,6 +46,7 @@
 		EF0DA6062799F6AB00F6AEBB /* ListingItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListingItemProtocol.swift; sourceTree = "<group>"; };
 		EF0DA608279F34C100F6AEBB /* Result.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Result.swift; sourceTree = "<group>"; };
 		EF0DA60A27A2BE6700F6AEBB /* JSONDictonary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSONDictonary.swift; path = FeedApp/JSONDictonary.swift; sourceTree = SOURCE_ROOT; };
+		EF1CE61327FCC92A007A7397 /* LinkOpenerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LinkOpenerDelegate.swift; sourceTree = "<group>"; };
 		EF3846DA276D547F006DCDDC /* ImageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCell.swift; sourceTree = "<group>"; };
 		EF5848482786FB490069F684 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		EF58484A2786FCCB0069F684 /* LayoutAnchor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutAnchor.swift; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				EFBD99672767C47F00373FBF /* MainViewController.swift */,
+				EF1CE61327FCC92A007A7397 /* LinkOpenerDelegate.swift */,
 				EFBDC3BD27E900C7000BE79D /* TextCell.swift */,
 				EFF05ED227B6A20800AF02CA /* LinkCell.swift */,
 				EF83A2D327E756DE002B8AE0 /* FooterCell.swift */,
@@ -257,6 +260,7 @@
 				EF0DA6072799F6AB00F6AEBB /* ListingItemProtocol.swift in Sources */,
 				EFA28A6327D93E47006B7390 /* Media.swift in Sources */,
 				EFF05ED127B47DDE00AF02CA /* TitleCell.swift in Sources */,
+				EF1CE61427FCC92A007A7397 /* LinkOpenerDelegate.swift in Sources */,
 				EF07A4D527CFF89B007FCE8C /* FeedPresenter.swift in Sources */,
 				EF5848492786FB490069F684 /* UIViewExtension.swift in Sources */,
 				EF0DA6012799F32600F6AEBB /* Listing.swift in Sources */,

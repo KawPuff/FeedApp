@@ -42,7 +42,7 @@ final class FeedPresenterImpl: FeedPresenter {
 //            return .titleOnly
 //        }
 //        
-        return .titleOnly
+        return .photo
     }
     
     func getSubredditImage(_ index: Int, completion: @escaping (UIImage?) -> Void){
