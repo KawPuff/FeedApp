@@ -8,9 +8,16 @@
 import Foundation
 
 enum PostType {
+    
     case link
-    case photo
+    
+    case image
+    
+    case album
+    
     case text
-    case video
+    
+    case media
+    
     case titleOnly
 }

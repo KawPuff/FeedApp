@@ -8,12 +8,19 @@
 import Foundation
 
 struct RedditVideo {
+    
     let bitrate: Int
+    
     let fallbackUrl: String
+    
     let height: Int
+    
     let width: Int
+    
     let duration: Float
+    
     let isGif: Bool
+    
     init(jsonDictionary: JSONDictionary) {
         self.bitrate = jsonDictionary["bitrate"] as? Int ?? 0
         self.fallbackUrl = jsonDictionary["fallback_url"] as? String ?? ""
@@ -22,4 +29,5 @@ struct RedditVideo {
         self.duration = jsonDictionary["duration"] as? Float ?? 0.0
         self.isGif = jsonDictionary["is_gif"] as? Bool ?? false
     }
+    
 }

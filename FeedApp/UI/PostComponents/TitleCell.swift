@@ -10,21 +10,13 @@ import UIKit
 final class TitleCell: UITableViewCell {
     
     static public let identifier = "TitleCell"
+    
     let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
-//    let titleTextView: UITextView = {
-//        let tv = UITextView()
-//        tv.isEditable = false
-//        tv.backgroundColor = .darkGray
-//        tv.textContainerInset = .zero
-//        tv.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. "
-//        tv.isScrollEnabled = false
-//        tv.font = .systemFont(ofSize: 21, weight: .semibold)
-//        return tv
-//    }()
+
     let titleTextView: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
@@ -35,10 +27,12 @@ final class TitleCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        backgroundColor = .clear
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+        backgroundColor = .clear
     }
     private func setupViews() {
         contentView.addSubview(mainView, layoutAnchors: [

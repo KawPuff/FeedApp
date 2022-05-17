@@ -20,11 +20,23 @@ final class LinkCell: UITableViewCell {
         view.backgroundColor = .white
         return view
     }()
+    private var heightConstraint: NSLayoutConstraint!
+    
+    var previewHeight: CGFloat {
+        set {
+            heightConstraint.constant = newValue == 0 ? newValue : 150
+        }
+        get {
+            return heightConstraint.constant
+        }
+    }
     
     let preview: UIImageView = {
         let iv = UIImageView()
         iv.backgroundColor = .orange
         iv.layer.cornerRadius = 12
+        iv.contentMode = .scaleAspectFill
+        iv.clipsToBounds = false
         iv.isUserInteractionEnabled = true //Отвечает за доступ к событиям
         iv.layer.masksToBounds = true
         return iv
@@ -45,24 +57,24 @@ final class LinkCell: UITableViewCell {
         label.textAlignment = .right
         return label
     }()
+    func setupPreviewImage(_ image: UIImage?) {
+        preview.image = image
+    }
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        backgroundColor = .clear
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(previewPressed))
         preview.addGestureRecognizer(recognizer)
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+        backgroundColor = .clear
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(previewPressed))
         preview.addGestureRecognizer(recognizer)
     }
-    @objc func previewPressed(sender: AnyObject) {
-        guard let url = URL(string: urlString), let delegate = delegate else {
-            return
-        }
-        delegate.openLink(url: url)
-    }
+    
     private func setupViews() {
         
         contentView.addSubview(mainView, layoutAnchors: [
@@ -80,9 +92,10 @@ final class LinkCell: UITableViewCell {
         preview.addSubview(titleBackground, layoutAnchors: [
             .bottom(0),
             .leading(0),
-            .trailing(0),
-            .height(20)
+            .trailing(0)
         ])
+        heightConstraint = NSLayoutConstraint(item: preview, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 150)
+        heightConstraint.isActive = true
         titleBackground.addSubview(domainTitle, layoutAnchors: [
             .bottom(0),
             .top(0),
@@ -90,4 +103,12 @@ final class LinkCell: UITableViewCell {
             .trailing(-10)
         ])
     }
+    
+    @objc func previewPressed(sender: AnyObject) {
+        guard let url = URL(string: urlString), let delegate = delegate else {
+            return
+        }
+        delegate.openLink(url: url)
+    }
+    
 }

@@ -7,23 +7,24 @@
 
 import Foundation
 
-struct SubredditInfo: ListingItem {
+struct Subreddit: ListingItem {
+
     var id: String
     
     var name: String
     
     static var kind: String = "t5"
     
-    let avatarUrl: String
+    let iconUrl: String
     
     init() {
         id  = ""
         name = ""
-        avatarUrl = ""
+        iconUrl = ""
     }
     init(from jsonDictionary: JSONDictionary) {
         id = jsonDictionary["id"] as? String ?? ""
         name = jsonDictionary["name"]  as? String ?? ""
-        avatarUrl = jsonDictionary["icon_img"] as? String ?? ""
+        iconUrl = jsonDictionary["icon_img"] as? String ?? ""
     }
 }

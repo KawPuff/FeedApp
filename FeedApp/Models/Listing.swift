@@ -35,7 +35,7 @@ struct Listing {
         for listingItem in listingItems {
             switch listingItem["kind"] as! String{
             case "t3":
-                children.append(Link(json: listingItem["data"] as? JSONDictionary ?? [:]))
+                children.append(Post(json: listingItem["data"] as? JSONDictionary ?? [:]))
                 break
             default:
                 print("unknown")

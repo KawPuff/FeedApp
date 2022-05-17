@@ -7,13 +7,12 @@
 
 import UIKit
 
-typealias ImageCache = NSCache<AnyObject, AnyObject>
+
 
 final class HeaderCell: UITableViewCell {
     
     static public let identifier = "HeaderCell"
     
-    let avatarCache = ImageCache()
     
     public let mainView: UIView = {
         let view = UIView()
@@ -69,10 +68,12 @@ final class HeaderCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        backgroundColor = .clear
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+        backgroundColor = .clear
     }
     override func layoutSubviews() {
         super.layoutSubviews()

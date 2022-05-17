@@ -72,10 +72,12 @@ final class FooterCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
+        backgroundColor = .clear
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
+        backgroundColor = .clear
     }
     func setupViews() {
         contentView.addSubview(mainView, layoutAnchors: [

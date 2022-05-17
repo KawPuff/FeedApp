@@ -7,6 +7,6 @@
 
 import Foundation
 
-protocol LinkOpenerDelegate {
+protocol LinkOpenerDelegate: AnyObject {
     func openLink(url: URL)
 }

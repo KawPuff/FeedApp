@@ -7,32 +7,37 @@
 
 import UIKit
 
-protocol NetworkManager🌐 {
+typealias Response<T> = (data: T?, error: String?)
+
+protocol NetworkService🌐 {
     
-    static var shared: NetworkManager🌐 { get }
-    func downloadImage(urlString: String, _ completion:  ((UIImage?) -> Void)?)
-    func getPosts(subreddit: String, limit: Int, after itemName: String?,_ completion: @escaping (Result<Listing>) -> Void)
-    func getSubredditInfo(subreddit: String, _ completion: @escaping (String) -> Void)
+    static var shared: NetworkService🌐 { get }
+    
+    func fetchImage(pathURL: String, _ completion: @escaping ((UIImage?) -> Void))
+    
+    func fetchListing(subreddit: String, postsLimit: Int, after itemName: String?,_ completion: @escaping (Response<Listing>) -> Void)
+    
+    func fetchSubreddit(subreddit: String, _ completion: @escaping (Response<Subreddit>) -> Void)
 }
-class RedditManager: NetworkManager🌐 {
+class RedditAPI: NetworkService🌐 {
     
     private init() {
         
     }
     
-    public static var shared: NetworkManager🌐 = RedditManager()
+    public static var shared: NetworkService🌐 = RedditAPI()
     
-    func downloadImage(urlString: String, _ completion:  ((UIImage?) -> Void)?){
-        guard let url = URL(string: urlString) else {
-            completion?(nil)
+    func fetchImage(pathURL: String, _ completion: @escaping ((UIImage?) -> Void)){
+        guard let url = URL(string: pathURL) else {
+            completion(nil)
             return
         }
         
         URLSession.shared.downloadTask(with: url) { url, _, error in
-            guard error == nil else {
-                print(error?.localizedDescription)
+            if let error = error {
+                print(error.localizedDescription)
                 DispatchQueue.main.async {
-                    completion?(nil)
+                    completion(nil)
                 }
                 return
             }
@@ -40,82 +45,89 @@ class RedditManager: NetworkManager🌐 {
             guard let url = url, let imageData = try? Data(contentsOf: url) else{
                 print("Error image fetching")
                 DispatchQueue.main.async {
-                    completion?(nil)
+                    completion(nil)
                 }
                 return
             }
             DispatchQueue.main.async {
-                completion?(UIImage(data: imageData))
+                completion(UIImage(data: imageData))
             }
         }.resume()
     }
-    func getPosts(subreddit: String, limit: Int = 25, after itemName: String? = nil, _ completion: @escaping (Result<Listing>) -> Void) {
-        let itemName = itemName ?? ""
+    
+    func fetchListing(subreddit: String, postsLimit: Int = 25, after itemName: String? = nil, _ completion: @escaping (Response<Listing>) -> Void) {
         
-        let urlString = "https://www.reddit.com/r/\(subreddit).json?limit=\(limit)" + (itemName.isEmpty ? "" : "&after=" + itemName)
-        guard let url = URL(string: urlString) else {
-            completion(.failure("Url not found"))
+        guard let url = URL(string: createURLPath(subreddit, postsLimit, itemName)) else {
+            completion((nil, "Connection error"))
             return
         }
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         
         URLSession.shared.dataTask(with: request) { data, _ , error in
             if let error = error {
-                completion(.failure(error.localizedDescription))
+                completion((nil, error.localizedDescription))
                 return
             }
             guard let data = data else {
-                completion(.failure("No data found"))
+                completion((nil, "No data found"))
                 return
             }
             guard let object = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                completion(.failure("Error serialize json object."))
+                completion((nil, "Error serialize json object."))
                 return
             }
             guard let jsonDictionary = object as? JSONDictionary, let listingJson = jsonDictionary["data"] as? JSONDictionary else {
-                completion(.failure("Error creating jsonDictionary"))
+                completion((nil, "Error creating jsonDictionary"))
                 return
             }
             
             DispatchQueue.main.async {
                 let listing = Listing(json: listingJson)
-                completion(.success(listing))
+                completion((listing, nil))
             }
             
         }.resume()
     }
     
-    func getSubredditInfo(subreddit: String, _ completion: @escaping (String) -> Void){
+    private func createURLPath(_ subreddit: String, _ postsLimit: Int, _ after: String? = nil) -> String {
+        let limit = postsLimit > 0 ? postsLimit : 25
+        let after = after ?? ""
+        
+        return "https://www.reddit.com/r/\(subreddit).json?limit=\(limit)" + (after.isEmpty ? "" : "&after=" + after)
+    }
+    
+    func fetchSubreddit(subreddit: String, _ completion: @escaping (Response<Subreddit>) -> Void){
         guard let url = URL(string: "https://www.reddit.com/\(subreddit)/about.json?") else {
-            completion("")
+            completion((nil, "Error"))
             return
         }
         
         URLSession.shared.dataTask(with: url) { data, _, error in
-            guard error == nil else{
+            if let error = error {
                 DispatchQueue.main.async {
-                    completion("error")
+                    completion((nil, error.localizedDescription))
                 }
                 return
             }
             guard let data = data, let object = try? JSONSerialization.jsonObject(with: data, options: [])  else {
                 DispatchQueue.main.async {
-                    completion("error parsae data")
+                    completion((nil, "Error"))
                 }
                 return
             }
             guard let jsonDictionary = object as? JSONDictionary, let listingJson = jsonDictionary["data"] as? JSONDictionary else {
                 DispatchQueue.main.async {
-                    completion("error fetch info")
+                    completion((nil, "Error"))
                     
                 }
                 return
             }
             
             DispatchQueue.main.async {
-                let listing = SubredditInfo(from: listingJson)
-                completion(listing.avatarUrl)
+                let sub = Subreddit(from: listingJson)
+                completion((sub, nil))
             }
             
         }.resume()

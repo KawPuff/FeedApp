@@ -7,9 +7,9 @@
 
 import UIKit
 
-final class ImageCell: UICollectionViewCell {
+final class AlbumImageCell: UICollectionViewCell {
     
-    public static let identifier = "ImageCell"
+    public static let identifier = "AlbumImageCell"
     
     let contentImageView: UIImageView = {
         let imageView = UIImageView()
@@ -32,9 +32,6 @@ final class ImageCell: UICollectionViewCell {
    
     func configureConstraints() {
         NSLayoutConstraint.activate([
-            //
-            //  contentImageView
-            //
             contentImageView.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
             contentImageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             contentImageView.widthAnchor.constraint(equalTo: contentView.widthAnchor),
