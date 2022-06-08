@@ -20,16 +20,7 @@ final class LinkCell: UITableViewCell {
         view.backgroundColor = .white
         return view
     }()
-    private var heightConstraint: NSLayoutConstraint!
-    
-    var previewHeight: CGFloat {
-        set {
-            heightConstraint.constant = newValue == 0 ? newValue : 150
-        }
-        get {
-            return heightConstraint.constant
-        }
-    }
+    private var heightConstraint: NSLayoutConstraint?
     
     let preview: UIImageView = {
         let iv = UIImageView()
@@ -57,6 +48,9 @@ final class LinkCell: UITableViewCell {
         label.textAlignment = .right
         return label
     }()
+    func setupPreviewHeight(_ height: CGFloat) {
+        heightConstraint?.constant = height
+    }
     func setupPreviewImage(_ image: UIImage?) {
         preview.image = image
     }
@@ -74,7 +68,10 @@ final class LinkCell: UITableViewCell {
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(previewPressed))
         preview.addGestureRecognizer(recognizer)
     }
-    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        preview.image = nil
+    }
     private func setupViews() {
         
         contentView.addSubview(mainView, layoutAnchors: [
@@ -84,18 +81,22 @@ final class LinkCell: UITableViewCell {
             .trailing(-15)
         ])
         mainView.addSubview(preview, layoutAnchors: [
-            .top(15),
-            .bottom(-15),
-            .leading(15),
-            .trailing(-15)
+            .top(10),
+            .bottom(-10),
+            .leading(10),
+            .trailing(-10)
         ])
+        heightConstraint = NSLayoutConstraint(item: preview, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0)
+        heightConstraint?.isActive = true
+        heightConstraint?.priority = .defaultHigh
         preview.addSubview(titleBackground, layoutAnchors: [
             .bottom(0),
             .leading(0),
             .trailing(0)
         ])
-        heightConstraint = NSLayoutConstraint(item: preview, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 150)
-        heightConstraint.isActive = true
+        titleBackground.activate(layoutAnchors: [
+            .relative(attribute: .height, relation: .equal, relatedTo: .notAnAttribute, multiplier: 1, constant: 25)
+        ], to: nil)
         titleBackground.addSubview(domainTitle, layoutAnchors: [
             .bottom(0),
             .top(0),

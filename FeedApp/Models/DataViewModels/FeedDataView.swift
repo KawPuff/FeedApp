@@ -212,19 +212,49 @@ struct SingleImageDataView: FeedDataView {
 }
 struct MediaDataView: FeedDataView {
     
-    var type: PostType = .media
+    let type: PostType = .media
     
-    var subreddit: String
+    let subreddit: String
     
-    var user: String
+    let user: String
     
-    var commentsCount: String
+    let commentsCount: String
     
-    var score: String
+    let score: String
     
-    var title: String
+    let title: String
     
+    let url: String
     
+    let height: Int
+    
+    let width: Int
+    
+    let isGif: Bool
+    
+    init() {
+        subreddit = "r/Subreddit"
+        user = "user"
+        commentsCount = "15.5k"
+        score = "20.3k"
+        title = "Check out new video"
+        url = ""
+        height = 0
+        width = 0
+        isGif = false
+    }
+    
+    init(post: Post) {
+        self.subreddit = post.subreddit
+        self.user = post.author
+        self.commentsCount = post.commentsCount.formatted != "0" ? post.commentsCount.formatted : ""
+        self.score = post.score.formatted != "0" ? post.score.formatted : "Vote"
+        self.title = post.title
+        self.url = post.media.redditVideo.hlsUrl.decodedHTML!
+        self.height = post.media.redditVideo.height
+        self.width = post.media.redditVideo.width
+        self.isGif = post.media.redditVideo.isGif
+    }
 }
 struct AlbumDataView: FeedDataView {
 

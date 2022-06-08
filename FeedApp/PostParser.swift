@@ -23,7 +23,7 @@ class PostParser {
             return SingleImageDataView(post: post, imageSize: fetchImageSizeFrom(url: url))
         }
         if post.isVideo {
-            
+            return MediaDataView(post: post)
         }
         if !post.selftext.isEmpty{
             return TextDataView(post: post)

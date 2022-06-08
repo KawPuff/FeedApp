@@ -19,6 +19,7 @@ final class FooterCell: UITableViewCell {
         view.layer.masksToBounds = true
         return view
     }()
+
     public let commentsStackView: UIStackView = {
         let sv = UIStackView()
         sv.axis = .horizontal
@@ -33,16 +34,34 @@ final class FooterCell: UITableViewCell {
     }()
     public let commentsCountLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .lightGray
         label.text = "112"
         label.textAlignment = .left
         return label
     }()
+    public let buttonsStackView: UIStackView = {
+        let sv = UIStackView()
+        sv.axis = .horizontal
+        sv.alignment = .fill
+        sv.distribution = .fillEqually
+        return sv
+    }()
+    public let giftButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.init(named: "Gift"), for: .normal)
+        return button
+    }()
+    public let sendButton: UIButton = {
+        let button = UIButton()
+        button.setImage(.init(named: "Send"), for: .normal)
+        return button
+    }()
     public let rateStackView: UIStackView = {
        let sv = UIStackView()
         sv.axis = .horizontal
         sv.alignment = .fill
+        sv.backgroundColor = .systemGray4
         sv.distribution = .fillEqually
         sv.layer.cornerRadius = 15
         sv.layer.masksToBounds = true
@@ -57,9 +76,8 @@ final class FooterCell: UITableViewCell {
     }()
     public let rateLabel: UILabel = {
         let label = UILabel()
-        label.text = "21.3k"
         label.textAlignment = .center
-        label.font = .systemFont(ofSize: 14, weight: .semibold)
+        label.font = .systemFont(ofSize: 12, weight: .semibold)
         label.textColor = .lightGray
         return label
     }()
@@ -101,13 +119,15 @@ final class FooterCell: UITableViewCell {
         
         commentsStackView.addArrangedSubview(commentsButton)
         commentsStackView.addArrangedSubview(commentsCountLabel)
+        
+        
         //
         //  rateStackView
         //
         
         mainView.addSubview(rateStackView, layoutAnchors: [
             .centerY(0),
-            .trailing(-10)
+            .trailing(-15)
         ])
         
         
@@ -120,5 +140,20 @@ final class FooterCell: UITableViewCell {
         rateStackView.addArrangedSubview(upvoteButton)
         rateStackView.addArrangedSubview(rateLabel)
         rateStackView.addArrangedSubview(downvoteButton)
+        
+        mainView.addSubview(buttonsStackView, layoutAnchors: [
+            .centerY(0)
+        ])
+        buttonsStackView.activate(layoutAnchors: [
+            .relative(attribute: .leading, relation: .equal, relatedTo: .trailing, multiplier: 1, constant: 0),
+            .relative(attribute: .height, relation: .equal, relatedTo: .height, multiplier: 1, constant: 0)
+        ], to: commentsStackView)
+        buttonsStackView.activate(layoutAnchors: [
+            .relative(attribute: .trailing, relation: .equal, relatedTo: .leading, multiplier: 1, constant: 0)
+        ], to: rateStackView)
+        
+        buttonsStackView.addArrangedSubview(giftButton)
+        buttonsStackView.addArrangedSubview(sendButton)
     }
+    
 }

@@ -20,6 +20,7 @@ final class TitleCell: UITableViewCell {
     let titleTextView: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
+        label.textColor = .black
         label.textAlignment = .left
         label.font = .systemFont(ofSize: 21, weight: .semibold)
         return label

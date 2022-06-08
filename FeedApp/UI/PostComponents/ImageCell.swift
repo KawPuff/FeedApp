@@ -10,7 +10,7 @@ import UIKit
 final class ImageCell: UITableViewCell {
     
     public static let identifier = "ImageCell"
-    
+      
     private let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
@@ -21,6 +21,7 @@ final class ImageCell: UITableViewCell {
         imageView.layer.cornerRadius = 13
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = false
+        imageView.isUserInteractionEnabled = true
         imageView.layer.masksToBounds = true
         return imageView
     }()
@@ -31,18 +32,24 @@ final class ImageCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
         backgroundColor = .clear
+        
     }
-    
+
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         setupViews()
         backgroundColor = .clear
+    }
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        cellImageView.image = nil
     }
     
     func setupImageHeight(height: CGFloat) {
         imageHeightConstraint?.constant = height
     }
     func setupImage(image: UIImage?) {
+        
         cellImageView.image = image
     }
     
@@ -60,6 +67,7 @@ final class ImageCell: UITableViewCell {
             .trailing(-10)
         ])
         imageHeightConstraint = NSLayoutConstraint(item: cellImageView, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0)
+        imageHeightConstraint?.priority = .defaultHigh
         imageHeightConstraint?.isActive = true
     }
 }

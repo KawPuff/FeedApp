@@ -15,7 +15,9 @@ protocol FeedView: AnyObject {
 final class MainViewController: UIViewController, FeedView {
 
     private var presenter: FeedPresenter!
+    
     private var dataViews: [FeedDataView] = []
+    
     private var postsLoaded: Bool = true
     
     private let feedTableView: UITableView = {
@@ -46,6 +48,7 @@ final class MainViewController: UIViewController, FeedView {
         feedTableView.register(LinkCell.self, forCellReuseIdentifier: LinkCell.identifier)
         feedTableView.register(AlbumCell.self, forCellReuseIdentifier: AlbumCell.identifier)
         feedTableView.register(ImageCell.self, forCellReuseIdentifier: ImageCell.identifier)
+        feedTableView.register(MediaCell.self, forCellReuseIdentifier: MediaCell.identifier)
         feedTableView.delegate = self
         feedTableView.dataSource = self
         
@@ -126,7 +129,7 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
             
             case contentRow:
             switch dataViews[indexPath.section].type {
-                case .link:
+            case .link:
                 let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.identifier) as! LinkCell
                 let linkDataView = dataViews[indexPath.section] as! LinkDataView
                 cell.delegate = self
@@ -135,24 +138,24 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
                 
                 let height = CGFloat(linkDataView.previewImageHeight)
                 let width = CGFloat(linkDataView.previewImageWidth)
-                cell.previewHeight = calcHeightWithTableViewRatio(size: CGSize(width: width, height: height))
-                cell.setupPreviewImage(nil)
+                cell.setupPreviewHeight(calcHeightWithTableViewRatio(size: CGSize(width: width, height: height)))
+                
                 ImageLoader.shared.load(by: linkDataView.previewImageUrl) { image in
                     cell.setupPreviewImage(image)
                 }
                 return cell
                 
-                case .image:
+            case .image:
                 let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.identifier) as! ImageCell
                 let imageDataView = dataViews[indexPath.section] as! SingleImageDataView
                 cell.setupImageHeight(height: calcHeightWithTableViewRatio(size: CGSize(width: imageDataView.imageWidth, height: imageDataView.imageHeight)))
-                cell.setupImage(image: nil)
+                
                 ImageLoader.shared.load(by: imageDataView.imageUrl) { image in
                     cell.setupImage(image: image)
                 }
                 return cell
                 
-                case .album:
+            case .album:
                 let cell = tableView.dequeueReusableCell(withIdentifier: AlbumCell.identifier) as! AlbumCell
                 let albumDataView = dataViews[indexPath.section] as! AlbumDataView
                 cell.delegate = self
@@ -162,14 +165,21 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
                 let width = CGFloat(albumDataView.imagesDataView.first?.width ?? 0)
                 cell.setAlbumHeight(calcHeightWithTableViewRatio(size: CGSize(width: width, height: height)))
                 return cell
-                    
-                case .text:
+            case .media:
+                let cell = tableView.dequeueReusableCell(withIdentifier: MediaCell.identifier) as! MediaCell
+                let mediaDataView = dataViews[indexPath.section] as! MediaDataView
+                let height = CGFloat(mediaDataView.height)
+                let width = CGFloat(mediaDataView.width)
+                cell.mediaHeight = calcHeightWithTableViewRatio(size: CGSize(width: width, height: height))
+                cell.setupMediaUrl(mediaDataView.url)
+                return cell
+            case .text:
                 let cell = tableView.dequeueReusableCell(withIdentifier: TextCell.identifier) as! TextCell
                 let textDataView = dataViews[indexPath.section] as! TextDataView
                 cell.text.text = textDataView.text
                 return cell
                 
-                default:
+            default:
                 return UITableViewCell()
                 }
             
@@ -194,6 +204,9 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         let heightRatio = view.frame.height / size.height
         
         let scaleFactor = min(widthRatio, heightRatio)
+        if size.height > size.width {
+            return size.width * scaleFactor
+        }
         return size.height * scaleFactor
     }
     
@@ -224,3 +237,4 @@ extension MainViewController: LinkOpenerDelegate {
     
     
 }
+

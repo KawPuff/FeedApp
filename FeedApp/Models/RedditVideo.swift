@@ -11,7 +11,7 @@ struct RedditVideo {
     
     let bitrate: Int
     
-    let fallbackUrl: String
+    let hlsUrl: String
     
     let height: Int
     
@@ -23,7 +23,7 @@ struct RedditVideo {
     
     init(jsonDictionary: JSONDictionary) {
         self.bitrate = jsonDictionary["bitrate"] as? Int ?? 0
-        self.fallbackUrl = jsonDictionary["fallback_url"] as? String ?? ""
+        self.hlsUrl = jsonDictionary["hls_url"] as? String ?? ""
         self.height = jsonDictionary["height"] as? Int ?? 0
         self.width = jsonDictionary["width"] as? Int ?? 0
         self.duration = jsonDictionary["duration"] as? Float ?? 0.0
