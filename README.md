@@ -1,8 +1,8 @@
 # FeedApp
 > Mobile client for Reddit's feed with friendly UI.
-## Includes
+## Features
 * Feed with daily popular posts from Reddit
-* Simple ui that focused more on viewing content
+* Simple UI allows you to keep focusing on your favorite content
 ## Used in project
 * Swift 5
 * UIKit
