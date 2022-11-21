@@ -34,6 +34,7 @@
 		EFA28A6327D93E47006B7390 /* Media.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA28A6227D93E47006B7390 /* Media.swift */; };
 		EFA28A6527D9443C006B7390 /* RedditVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA28A6427D9443C006B7390 /* RedditVideo.swift */; };
 		EFA9C1882819DB7000053512 /* PostParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFA9C1872819DB7000053512 /* PostParser.swift */; };
+		EFB80DCE2850C715005A750F /* LoadOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFB80DCD2850C715005A750F /* LoadOperation.swift */; };
 		EFBD99542767C3A400373FBF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBD99532767C3A400373FBF /* AppDelegate.swift */; };
 		EFBD99562767C3A500373FBF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFBD99552767C3A500373FBF /* SceneDelegate.swift */; };
 		EFBD995D2767C3AB00373FBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EFBD995C2767C3AB00373FBF /* Assets.xcassets */; };
@@ -75,6 +76,8 @@
 		EFA28A6227D93E47006B7390 /* Media.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Media.swift; sourceTree = "<group>"; };
 		EFA28A6427D9443C006B7390 /* RedditVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedditVideo.swift; sourceTree = "<group>"; };
 		EFA9C1872819DB7000053512 /* PostParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostParser.swift; sourceTree = "<group>"; };
+		EFB80DCD2850C715005A750F /* LoadOperation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadOperation.swift; sourceTree = "<group>"; };
+		EFB9D4FD28535C72001C8881 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		EFBD99502767C3A400373FBF /* FeedApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FeedApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		EFBD99532767C3A400373FBF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		EFBD99552767C3A500373FBF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -140,11 +143,20 @@
 			path = AutoLayoutDSL;
 			sourceTree = "<group>";
 		};
+		EFB9D4FC28535C72001C8881 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EFB9D4FD28535C72001C8881 /* AVFoundation.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		EFBD99472767C3A400373FBF = {
 			isa = PBXGroup;
 			children = (
 				EFBD99522767C3A400373FBF /* FeedApp */,
 				EFBD99512767C3A400373FBF /* Products */,
+				EFB9D4FC28535C72001C8881 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -239,6 +251,7 @@
 			children = (
 				EFBD99692767C4F200373FBF /* NetworkService🌐.swift */,
 				EF0E11452829360C00A4AF7D /* ImageLoader.swift */,
+				EFB80DCD2850C715005A750F /* LoadOperation.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -316,6 +329,7 @@
 				EFBD99682767C47F00373FBF /* MainViewController.swift in Sources */,
 				EF58484E278706030069F684 /* NSLayoutConstraintExtension.swift in Sources */,
 				EF3406222805F2030053C115 /* PreviewImage.swift in Sources */,
+				EFB80DCE2850C715005A750F /* LoadOperation.swift in Sources */,
 				EF0DA60B27A2BE6700F6AEBB /* JSONDictonary.swift in Sources */,
 				EF340624280606770053C115 /* Image.swift in Sources */,
 				EF0E11462829360C00A4AF7D /* ImageLoader.swift in Sources */,

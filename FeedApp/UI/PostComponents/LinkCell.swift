@@ -11,9 +11,9 @@ final class LinkCell: UITableViewCell {
 
     static let identifier: String = "LinkCell"
     
-    var delegate: LinkOpenerDelegate?
+    private var delegate: LinkOpenerDelegate?
     
-    var urlString: String = ""
+    private var urlString: String = ""
     
     private let mainView: UIView = {
         let view = UIView()
@@ -22,7 +22,7 @@ final class LinkCell: UITableViewCell {
     }()
     private var heightConstraint: NSLayoutConstraint?
     
-    let preview: UIImageView = {
+    private let preview: UIImageView = {
         let iv = UIImageView()
         iv.backgroundColor = .orange
         iv.layer.cornerRadius = 12
@@ -33,13 +33,13 @@ final class LinkCell: UITableViewCell {
         return iv
     }()
     
-    private let titleBackground: UIView = {
+    private let background: UIView = {
         let view = UIView()
         view.backgroundColor = .black.withAlphaComponent(0.5)
         return view
     }()
     
-    let domainTitle: UILabel = {
+    private let domainTitle: UILabel = {
         let label = UILabel()
         label.numberOfLines = 1
         label.font = .systemFont(ofSize: 10, weight: .semibold)
@@ -48,12 +48,7 @@ final class LinkCell: UITableViewCell {
         label.textAlignment = .right
         return label
     }()
-    func setupPreviewHeight(_ height: CGFloat) {
-        heightConstraint?.constant = height
-    }
-    func setupPreviewImage(_ image: UIImage?) {
-        preview.image = image
-    }
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupViews()
@@ -72,6 +67,17 @@ final class LinkCell: UITableViewCell {
         super.prepareForReuse()
         preview.image = nil
     }
+    
+    public func configureWith(_ dataView: LinkDataView, heightWithTableRatio: CGFloat, delegate: LinkOpenerDelegate) {
+        self.urlString = dataView.url
+        self.domainTitle.text = dataView.domainTitle
+        self.heightConstraint?.constant = heightWithTableRatio
+        self.delegate = delegate
+    }
+    
+    public func setupImage(_ image: UIImage?) {
+        self.preview.image = image
+    }
     private func setupViews() {
         
         contentView.addSubview(mainView, layoutAnchors: [
@@ -89,15 +95,15 @@ final class LinkCell: UITableViewCell {
         heightConstraint = NSLayoutConstraint(item: preview, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 0)
         heightConstraint?.isActive = true
         heightConstraint?.priority = .defaultHigh
-        preview.addSubview(titleBackground, layoutAnchors: [
+        preview.addSubview(background, layoutAnchors: [
             .bottom(0),
             .leading(0),
             .trailing(0)
         ])
-        titleBackground.activate(layoutAnchors: [
+        background.activate(layoutAnchors: [
             .relative(attribute: .height, relation: .equal, relatedTo: .notAnAttribute, multiplier: 1, constant: 25)
         ], to: nil)
-        titleBackground.addSubview(domainTitle, layoutAnchors: [
+        background.addSubview(domainTitle, layoutAnchors: [
             .bottom(0),
             .top(0),
             .leading(10),

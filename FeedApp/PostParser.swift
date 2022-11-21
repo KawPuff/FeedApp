@@ -18,10 +18,10 @@ class PostParser {
         guard let url = URL(string: post.url) else {
             throw ParseError.fetchUrl
         }
-        
         if url.isImageURL {
             return SingleImageDataView(post: post, imageSize: fetchImageSizeFrom(url: url))
         }
+        
         if post.isVideo {
             return MediaDataView(post: post)
         }

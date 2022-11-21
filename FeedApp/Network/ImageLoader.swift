@@ -11,47 +11,78 @@ typealias ImageCache = NSCache<AnyObject, AnyObject>
 
 final class ImageLoader {
     
+    public static let shared = ImageLoader()
+    
     private var cache: ImageCache = ImageCache()
     
-    public static let shared = ImageLoader()
+    private let loadingQueue: OperationQueue = {
+        let loadingQueue = OperationQueue()
+        loadingQueue.maxConcurrentOperationCount = 10
+        return loadingQueue
+    }()
+    
+    private var loadingOperations: Dictionary<URL,LoadOperation> = [:]
     
     private init() {
         
     }
     
-    func load(by url: String, completion: @escaping (UIImage?) -> ()){
+    func cancelLoad(by url: String) {
         guard let url = URL(string: url) else {
-            completion(nil)
             return
         }
-        if let image = getChachedImage(url) {
-            completion(image)
+        if let operation = loadingOperations[url] {
+            operation.cancel()
+            loadingOperations.removeValue(forKey: url)
+        }
+    }
+    
+    func load(by url: String, completion:  ((UIImage?) -> ())?){
+        guard let url = URL(string: url) else {
+            completion?(nil)
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, _ , error in
-            if let error = error {
-                print(error.localizedDescription)
-                completion(nil)
+        if let image = getChachedImage(url) {
+            completion?(image)
+            return
+        }
+        
+        if let operation = loadingOperations[url] {
+            if let image = operation.image {
+                setCachedImage(image: image, url: url)
+                loadingOperations.removeValue(forKey: url)
+                completion?(image)
                 return
             }
-            guard let data = data else {
-                return
-            }
-            DispatchQueue.main.async { [unowned self] in
-                guard let image = UIImage(data: data) else {
-                    print("Fetched data isn't image")
+            operation.callback = { [unowned self] image in
+                guard let image = image else {
                     return
                 }
-                setCachedImage(image: image, url: url)
-                completion(UIImage(data: data))
+                self.setCachedImage(image: image, url: url)
+                loadingOperations.removeValue(forKey: url)
+                completion?(image)
             }
-        }.resume()
+            return
+        }
+        let operation = LoadOperation(url: url)
+        operation.callback = { [unowned self] image in
+            guard let image = image else {
+                return
+            }
+            self.setCachedImage(image: image, url: url)
+            loadingOperations.removeValue(forKey: url)
+            completion?(image)
+        }
+        loadingOperations[url] = operation
+        loadingQueue.addOperation(operation)
     }
+    
     private func getChachedImage(_ url: URL) -> UIImage? {
         return cache.object(forKey: url as AnyObject) as? UIImage
     }
     private func setCachedImage(image: UIImage, url: URL){
         cache.setObject(image as AnyObject, forKey: url as AnyObject)
     }
+    
 }
