@@ -14,7 +14,7 @@ final class HeaderCell: UITableViewCell {
     static public let identifier = "HeaderCell"
     
     
-    public let mainView: UIView = {
+    private let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         view.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
@@ -23,7 +23,7 @@ final class HeaderCell: UITableViewCell {
         return view
     }()
     
-    public let subredditImageView: UIImageView = {
+    private let subredditImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = .systemOrange
         imageView.contentMode = .scaleAspectFit
@@ -31,7 +31,7 @@ final class HeaderCell: UITableViewCell {
         return imageView
     }()
     
-    public let headerLabelButtonsStackView: UIStackView = {
+    private let headerLabelButtonsStackView: UIStackView = {
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.alignment = .fill
@@ -40,7 +40,7 @@ final class HeaderCell: UITableViewCell {
         return stackView
     }()
     
-    public let subredditNameButton: UIButton = {
+    private let subredditNameButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.darkGray, for: .normal)
         button.contentHorizontalAlignment = .left
@@ -49,7 +49,7 @@ final class HeaderCell: UITableViewCell {
         return button
     }()
     
-    public let redditUserNameButton: UIButton = {
+    private let redditUserNameButton: UIButton = {
         let button = UIButton()
         button.setTitleColor(.lightGray, for: .normal)
         button.contentHorizontalAlignment = .left
@@ -57,7 +57,7 @@ final class HeaderCell: UITableViewCell {
         return button
     }()
     
-    public let settingsButton: UIButton = {
+    private let settingsButton: UIButton = {
         let button = UIButton()
         button.setImage(.init(named: "More"), for: .normal)
         button.imageView?.tintColor = .clear
@@ -85,7 +85,12 @@ final class HeaderCell: UITableViewCell {
         super.prepareForReuse()
         subredditImageView.image = nil
     }
-    func setupViews() {
+    
+    public func configureWith(_ dataView: FeedDataView) {
+        self.redditUserNameButton.setTitle(dataView.user, for: .normal)
+        self.subredditNameButton.setTitle(dataView.subreddit, for: .normal)
+    }
+    private func setupViews() {
         contentView.addSubview(mainView, layoutAnchors: [
             .leading(15),
             .trailing(-15),

@@ -11,13 +11,13 @@ final class TitleCell: UITableViewCell {
     
     static public let identifier = "TitleCell"
     
-    let mainView: UIView = {
+    private let mainView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
         return view
     }()
 
-    let titleTextView: UILabel = {
+    private let title: UILabel = {
         let label = UILabel()
         label.numberOfLines = 0
         label.textColor = .black
@@ -35,6 +35,10 @@ final class TitleCell: UITableViewCell {
         setupViews()
         backgroundColor = .clear
     }
+    
+    public func configureWith(_ dataView: FeedDataView) {
+        title.text = dataView.title
+    }
     private func setupViews() {
         contentView.addSubview(mainView, layoutAnchors: [
             .leading(15),
@@ -42,7 +46,7 @@ final class TitleCell: UITableViewCell {
             .top(0),
             .bottom(0)
         ])
-        mainView.addSubview(titleTextView, layoutAnchors: [
+        mainView.addSubview(title, layoutAnchors: [
             .leading(10),
             .trailing(-10),
             .top(0),

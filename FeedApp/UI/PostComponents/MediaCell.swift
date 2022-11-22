@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import AVFoundation
+import AVKit
 
 class MediaCell: UITableViewCell {
     
@@ -55,6 +55,7 @@ class MediaCell: UITableViewCell {
         guard let url = URL(string: url) else {
             return
         }
+        
         player = AVPlayer(url: url)
         player.isMuted = true
         

@@ -51,7 +51,7 @@ final class MainViewController: UIViewController, FeedView {
         feedTableView.register(MediaCell.self, forCellReuseIdentifier: MediaCell.identifier)
         feedTableView.delegate = self
         feedTableView.dataSource = self
-        
+        feedTableView.prefetchDataSource = self
         view.addSubview(feedTableView, layoutAnchors: [
             .leading(0),
             .trailing(0),
@@ -102,8 +102,6 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         
     }
     
-    
-    
     func numberOfSections(in tableView: UITableView) -> Int {
         return dataViews.count
     }
@@ -118,13 +116,12 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
         switch indexPath.row {
             case headerRow:
             let cell = tableView.dequeueReusableCell(withIdentifier: HeaderCell.identifier) as! HeaderCell
-            cell.redditUserNameButton.setTitle(dataViews[indexPath.section].user, for: .normal)
-            cell.subredditNameButton.setTitle(dataViews[indexPath.section].subreddit, for: .normal)
+            cell.configureWith(dataViews[indexPath.section])
             return cell
             
             case titleRow:
             let cell = tableView.dequeueReusableCell(withIdentifier: TitleCell.identifier) as! TitleCell
-            cell.titleTextView.text = dataViews[indexPath.section].title
+            cell.configureWith(dataViews[indexPath.section])
             return cell
             
             case contentRow:
@@ -132,25 +129,26 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
             case .link:
                 let cell = tableView.dequeueReusableCell(withIdentifier: LinkCell.identifier) as! LinkCell
                 let linkDataView = dataViews[indexPath.section] as! LinkDataView
-                cell.delegate = self
-                cell.urlString = linkDataView.url
-                cell.domainTitle.text = linkDataView.domainTitle
                 
                 let height = CGFloat(linkDataView.previewImageHeight)
                 let width = CGFloat(linkDataView.previewImageWidth)
-                cell.setupPreviewHeight(calcHeightWithTableViewRatio(size: CGSize(width: width, height: height)))
+                let heightWithRatio = calcHeightWithTableViewRatio(size: CGSize(width: width, height: height))
                 
-                ImageLoader.shared.load(by: linkDataView.previewImageUrl) { image in
-                    cell.setupPreviewImage(image)
+                cell.configureWith(linkDataView, heightWithTableRatio: heightWithRatio, delegate: self)
+                presenter.fetchImage(by: linkDataView.previewImageUrl) { image in
+                    cell.setupImage(image)
                 }
                 return cell
                 
             case .image:
                 let cell = tableView.dequeueReusableCell(withIdentifier: ImageCell.identifier) as! ImageCell
                 let imageDataView = dataViews[indexPath.section] as! SingleImageDataView
-                cell.setupImageHeight(height: calcHeightWithTableViewRatio(size: CGSize(width: imageDataView.imageWidth, height: imageDataView.imageHeight)))
+                let height = CGFloat(imageDataView.imageHeight)
+                let width = CGFloat(imageDataView.imageWidth)
+                let heightWithRatio = calcHeightWithTableViewRatio(size: CGSize(width: width, height: height))
+                cell.configureWith(imageDataView, heightWithTableRatio: heightWithRatio)
                 
-                ImageLoader.shared.load(by: imageDataView.imageUrl) { image in
+                presenter.fetchImage(by: imageDataView.imageUrl) { image in
                     cell.setupImage(image: image)
                 }
                 return cell
@@ -194,7 +192,27 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
             default:
                 return UITableViewCell()
         }
+        
 
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let cellNumberToPreload = 10
+        if indexPath.section == tableView.numberOfSections - cellNumberToPreload {
+            presenter.fetchNextPosts { [weak self] responce in
+                guard let self = self else { return }
+                if let data = responce.data {
+                    self.dataViews += data
+                    tableView.reloadData()
+                }
+                
+                if let error = responce.error {
+                    print(error)
+                    return
+                }
+                
+            }
+        }
     }
     private func calcHeightWithTableViewRatio(size: CGSize) -> CGFloat{
         guard size.height != 0 && size.width != 0 else {
@@ -213,6 +231,58 @@ extension MainViewController: UITableViewDelegate, UITableViewDataSource {
 
     
 }
+// MARK: - UITableViewDataSourcePrefetching
+
+extension MainViewController: UITableViewDataSourcePrefetching {
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            switch dataViews[indexPath.section].type {
+            case .image:
+                let url = (dataViews[indexPath.section] as! SingleImageDataView).imageUrl
+                ImageLoader.shared.load(by: url, completion: nil)
+                break
+            case .media:
+                /* Prefetch media cells */
+                break
+            case .album:
+                (dataViews[indexPath.section] as! AlbumDataView).imagesDataView.forEach {
+                    ImageLoader.shared.load(by: $0.imageUrl, completion: nil)
+                }
+                break
+            case .link:
+                let url = (dataViews[indexPath.section] as! LinkDataView).previewImageUrl
+                ImageLoader.shared.load(by: url, completion: nil)
+                break
+            default:
+                break
+            }
+        }
+    }
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        for indexPath in indexPaths {
+            switch dataViews[indexPath.section].type {
+            case .image:
+                let url = (dataViews[indexPath.section] as! SingleImageDataView).imageUrl
+                ImageLoader.shared.cancelLoad(by: url)
+                break
+            case .media:
+               /* Cancel load for media cells */
+                break
+            case .album:
+                (dataViews[indexPath.section] as! AlbumDataView).imagesDataView.forEach {
+                    ImageLoader.shared.cancelLoad(by: $0.imageUrl)
+                }
+                break
+            case .link:
+                let url = (dataViews[indexPath.section] as! LinkDataView).previewImageUrl
+                ImageLoader.shared.cancelLoad(by: url)
+                break
+            default:
+                break
+            }
+        }
+    }
+}
 // MARK: - AlbumDelegate
 extension MainViewController: AlbumDelegate {
     func album(_ album: UICollectionView, numberOfPhotosInCellBy index: Int) -> Int {
@@ -221,7 +291,7 @@ extension MainViewController: AlbumDelegate {
     func album(_ album: UICollectionView, cellForImageAt indexPath: IndexPath, cellBy index: Int) -> AlbumImageCell {
         let cell = album.dequeueReusableCell(withReuseIdentifier: AlbumImageCell.identifier, for: indexPath) as! AlbumImageCell
         let albumData = dataViews[index] as! AlbumDataView
-        cell.contentImageView.image = nil
+
         ImageLoader.shared.load(by: albumData.imagesDataView[indexPath.item].imageUrl) { image in
             cell.contentImageView.image = image
         }
