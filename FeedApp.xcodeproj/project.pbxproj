@@ -171,8 +171,7 @@
 		EFBD99522767C3A400373FBF /* FeedApp */ = {
 			isa = PBXGroup;
 			children = (
-				EFA9C1872819DB7000053512 /* PostParser.swift */,
-				EFD89B672811D47500644BC8 /* Presenters */,
+				EFD89B672811D47500644BC8 /* Presenter */,
 				EFF05EC127A9462E00AF02CA /* Network */,
 				EFF05EBC27A93FCF00AF02CA /* UI */,
 				EF0DA5FD2799F1D400F6AEBB /* Models */,
@@ -218,17 +217,18 @@
 			path = DataViewModels;
 			sourceTree = "<group>";
 		};
-		EFD89B672811D47500644BC8 /* Presenters */ = {
+		EFD89B672811D47500644BC8 /* Presenter */ = {
 			isa = PBXGroup;
 			children = (
 				EF07A4D427CFF89B007FCE8C /* FeedPresenter.swift */,
 			);
-			path = Presenters;
+			path = Presenter;
 			sourceTree = "<group>";
 		};
 		EFD89B682811D48600644BC8 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				EFA9C1872819DB7000053512 /* PostParser.swift */,
 				EF0E114F2833A85400A4AF7D /* Extensions */,
 				EF58484C278705D10069F684 /* AutoLayoutDSL */,
 				EF07A4D627CFF952007FCE8C /* PostType.swift */,
